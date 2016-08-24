@@ -1,26 +1,26 @@
 package main
 
 import(
-//	"io"
 	"os"
 	"github.com/ushis/m3u"
 	"fmt"
-	"net"
 	"strings"
-//	"github.com/ziutek/gst"
 	"net/http"
 	"bufio"
 )
+
+const port = "8080"
+
+var shows = [...]string{ "comedy", "drama", "brain", "etc", "scifi" }
+
 func bracketHost(originalPath string) string{
 	newPath := "["
 	colon := strings.LastIndex(originalPath, ":")
 	newPath += originalPath[7:colon]+ "]" + originalPath[colon:]
-	fmt.Println(newPath)
 	return newPath
 }
 
 func getTrack(resp *http.Response, globalRes http.ResponseWriter){
-	fmt.Println("get track")
 	reader := bufio.NewReader(resp.Body)
 	for {
 		line, _ := reader.ReadBytes('\n')
@@ -42,33 +42,30 @@ func sendMessage(resp *http.Response, c []byte, res http.ResponseWriter){
 }
 
 func main(){
-	f, err := os.Open("comedy.m3u")
 
-	if err != nil { 
-		panic(err)
-	}
-	defer f.Close()
+	for _, show := range shows {
+		f, err := os.Open(show + ".m3u")
 
-	pl, err := m3u.Parse(f)
-	if err != nil {
-		panic(err)
-	}
+		if err != nil { 
+			panic(err)
+		}
+		defer f.Close()
 
-	for _, track := range pl {
-		//track.Path
-		conn,err := net.Dial("tcp", bracketHost(track.Path))
+		pl, err := m3u.Parse(f)
 		if err != nil {
 			panic(err)
 		}
-		defer conn.Close()
 
-		http.HandleFunc("/comedy", func(res http.ResponseWriter, req *http.Request){
-			fmt.Println("hitting comedy")
-			resp, _:= http.Get(track.Path)
-			fmt.Println("get "+track.Path)
-			getTrack(resp, res)
-		})
-		fmt.Println(http.ListenAndServe(":8080", nil))
+		for _, track := range pl {
+			//track.Path
+			http.HandleFunc("/" + show, func(res http.ResponseWriter, req *http.Request){
+				fmt.Println("hitting " + req.URL.Path)
+				resp, _:= http.Get(track.Path)
+				getTrack(resp, res)
+			})
 
+		}
 	}
+	fmt.Println("Listening to "+port)
+	fmt.Println(http.ListenAndServe(":"+port, nil))
 }
