@@ -53,7 +53,7 @@ func sendMessage(resp *http.Response, c []byte, res http.ResponseWriter) {
 func main() {
 
     for _, show := range shows {
-        f, err := os.Open(show + ".m3u")
+        f, err := os.Open("m3u/"+show + ".m3u")
 
         if err != nil {
             panic(err)
