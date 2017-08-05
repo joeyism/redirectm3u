@@ -11,7 +11,7 @@ import (
 	"github.com/ushis/m3u"
 )
 
-const port = "80"
+const port = "58440"
 
 var shows = [...]string{"comedy", "drama", "brain", "etc", "scifi"}
 var line = []byte{}
