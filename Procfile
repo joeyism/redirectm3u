@@ -1,0 +1,1 @@
+web: redirectm3u
