@@ -1,0 +1,11 @@
+{
+	"ImportPath": "github.com/joeyism/redirectm3u",
+	"GoVersion": "go1.6",
+	"GodepVersion": "v79",
+	"Deps": [
+		{
+			"ImportPath": "github.com/ushis/m3u",
+			"Rev": "94396b78473336aac9b3ab13d10537904a6a69c3"
+		}
+	]
+}
