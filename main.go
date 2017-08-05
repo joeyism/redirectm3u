@@ -11,7 +11,7 @@ import (
 	"github.com/ushis/m3u"
 )
 
-const port = "58440"
+var port = "8080"
 
 var shows = [...]string{"comedy", "drama", "brain", "etc", "scifi"}
 var line = []byte{}
@@ -51,6 +51,10 @@ func sendMessage(resp *http.Response, c []byte, res http.ResponseWriter) {
 }
 
 func main() {
+    port_env := os.Getenv("PORT")
+    if port_env == "" {
+      port = port_env
+    }
 
     for _, show := range shows {
         f, err := os.Open("m3u/"+show + ".m3u")
