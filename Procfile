@@ -1,1 +1,1 @@
-web: redirectm3u
+web: go run main.go
