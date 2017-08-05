@@ -52,7 +52,7 @@ func sendMessage(resp *http.Response, c []byte, res http.ResponseWriter) {
 
 func main() {
     port_env := os.Getenv("PORT")
-    if port_env == "" {
+    if port_env != "" {
       port = port_env
     }
 
